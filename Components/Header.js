@@ -18,7 +18,9 @@ const spring = {
   damping: 30,
 };
 
+{/*header nav bar on  main page */}
 function Header() {
+  {/*hooks for the theme implementation */}
   const [mounted, setMounted] = React.useState(false);
   const { setTheme, resolvedTheme, theme } = useTheme();
 
