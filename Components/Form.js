@@ -1,8 +1,34 @@
 import React, { useState } from "react";
+import { modalState, modalTypeState } from "../atoms/modalAtom";
+import { useRecoilState } from "recoil";
+import { getSession, signOut, useSession } from "next-auth/react";
 
 function Form() {
   const [input, setInput] = useState("");
   const [photo, setPhoto] = useState("");
+  const [modalOpen, setModalOpen] = useRecoilState(modalState);
+
+  const { data: session } = useSession();
+
+  const uploadPost = async (e) => {
+    e.preventDefault();
+    const response = await fetch("/api/post", {
+      method: "POST",
+      body: JSON.stringify({
+        input: input,
+        photo: photo,
+        username: session.user.name,
+        createdAt: new Date().toString(),
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+
+
+    const responseData = await response.json();
+    setModalOpen(false);
+  };
 
   return (
     <form className="flex flex-col relative space-y-2 text-black/80 dark:text-white/75">
@@ -13,28 +39,25 @@ function Form() {
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
-
       <input
-        type="file"
-        id="myFile"
-        name="filename"
-        className=" hiddenbg-transparent focus:outline-none rounded-full w-full  text-center mx-auto i hidden"
-        accept="image/*"
+        type="text"
+        placeholder="Add a photo URL (optional)"
+        className="bg-transparent focus:outline-none truncate max-w-xs md:max-w-sm dark:placeholder-white/75"
         value={photo}
         onChange={(e) => setPhoto(e.target.value)}
       />
-      <label htmlFor="myFile" className="text-blue-500 font-semibold transition-all hover:bg-blue-200 rounded-sm p-2">
-        Add a file
-      </label>
-        <div className="relative py-5">
-        <button type="submit" value="Submit" className="absolute right-2 top-2 py-1 px-4 rounded-full 
+      <div className="relative py-5">
+        <button
+          type="submit"
+          value="Submit"
+          className="absolute right-2 top-2 py-1 px-4 rounded-full 
         dark:text-[#1d2226] bg-blue-500"
-        disabled={!input.trim() && !photo}>
-        
-      
-        Post
-      </button>
-        </div>
+          disabled={!input.trim() && !photo}
+          onClick={uploadPost}
+        >
+          Post
+        </button>
+      </div>
     </form>
   );
 }
