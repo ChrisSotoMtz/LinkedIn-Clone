@@ -1,31 +1,43 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import Input from "./Input";
+import { getPostState } from "../atoms/postAtom";
 
-function Feed() {
+import Input from "./Input";
+import { handlePostState, useSSRPostsState } from "../atoms/postAtom";
+import Post from "./Post";
+
+function Feed({ posts }) {
   const [realtimePosts, setRealtimePosts] = useState([]);
-  const [handdlePost, setHanddlePost] = useRecoilState(handdlePostState);
-  const [useSSRPost, setUseSSRPost] = useRecoilState(useSSRPostState);
+  const [handlePost, setHandlePost] = useRecoilState(handlePostState);
+  const [postState, setPostState] = useRecoilState(getPostState);
+
+  const [useSSRPost, setUseSSRPost] = useRecoilState(useSSRPostsState);
 
   useEffect(() => {
-    const fetchPost = async () => {
+    const fetchPosts = async () => {
       const response = await fetch("/api/post", {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",},
+        headers: { "Content-Type": "application/json" },
       });
 
       const responseData = await response.json();
       setRealtimePosts(responseData);
-    }
+      setHandlePost(false);
+      setUseSSRPost(false);
+    };
 
+    fetchPosts();
+    console.log(realtimePosts);
+  }, [handlePost]);
 
-  }, [handdlePost]);
   return (
     <div className="space-y-6 pb-24 max-w-lg">
       <Input />
 
       {/* Post */}
+      {!useSSRPost
+        ? realtimePosts.map((post) => <Post key={post._id} post={post} />)
+        : posts.map((post) => <Post key={post._id} post={post} />)}
       {/* server side post */}
     </div>
   );
