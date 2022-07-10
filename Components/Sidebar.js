@@ -3,7 +3,6 @@ import Image from "next/image";
 import React from "react";
 import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
 import { useSession } from "next-auth/react";
-
 function Sidebar() {
   const { data: session } = useSession();
 
@@ -19,7 +18,7 @@ function Sidebar() {
           />
         </div>
         <Avatar
-          //onClick={signOut}
+          onClick={signOut}
           src={session?.user?.image}
           className="!h-14 !w-14 !border-2 !absolute !top-4 !cursor-pointer"
         />
