@@ -2,7 +2,7 @@ import { Avatar } from "@mui/material";
 import Image from "next/image";
 import React from "react";
 import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
-import { useSession } from "next-auth/react";
+import { useSession,signOut } from "next-auth/react";
 function Sidebar() {
   const { data: session } = useSession();
 
