@@ -6,7 +6,7 @@ import Sidebar from "../Components/Sidebar";
 import { useRouter } from "next/router";
 import Feed from "../Components/Feed";
 import { AnimatePresence } from "framer-motion";
-import Modal from "../Components/modal";
+import Modal from "../Components/Modal";
 import { useRecoilState } from "recoil";
 import { modalState, modalTypeState } from "../atoms/modalAtom";
 import { getDb } from "../util/mongodb";
@@ -14,7 +14,7 @@ import Widgets from "../Components/Widgets";
 
 
 export default function Home({ posts, articles }) {
-  console.log(articles);
+
   const [modalOpen, setModalOpen] = useRecoilState(modalState);
   const [modalType, setModalType] = useRecoilState(modalTypeState);
   const router = useRouter();
